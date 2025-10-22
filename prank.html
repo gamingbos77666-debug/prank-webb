@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>web malware (just kidding)</title>
+  <style>
+    body {
+      background-color: #111;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      overflow: hidden;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    button {
+      background-color: red;
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      border-radius: 8px;
+      font-size: 18px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      background-color: darkred;
+    }
+
+    video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      display: none;
+      z-index: 9999;
+      pointer-events: none; /* biar gak bisa diklik pause */
+    }
+  </style>
+</head>
+<body>
+  <h1>web malware (just kidding)</h1>
+  <button id="playButton">click</button>
+
+  <video id="videoPlayer" preload="auto">
+    <source src="glitch.mp4" type="video/mp4">
+  </video>
+  <audio id="bgAudio" src="bg.mp3"></audio>
+
+  <script>
+    const button = document.getElementById('playButton');
+    const video = document.getElementById('videoPlayer');
+    const audio = document.getElementById('bgAudio');
+
+    button.addEventListener('click', async () => {
+      button.style.display = 'none';
+      video.style.display = 'block';
+
+      // Minta fullscreen
+      try {
+        if (video.requestFullscreen) await video.requestFullscreen();
+        else if (video.webkitRequestFullscreen) await video.webkitRequestFullscreen();
+      } catch (err) {
+        console.warn('Fullscreen gagal:', err);
+      }
+
+      // Putar video dan audio
+      video.play();
+      audio.play();
+
+      // Cegah pause dengan deteksi setiap frame
+      setInterval(() => {
+        if (video.paused) video.play();
+      }, 100);
+    });
+
+    // Blok klik kanan
+    document.addEventListener('contextmenu', e => e.preventDefault());
+  </script>
+</body>
+</html>
